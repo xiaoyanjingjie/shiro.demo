@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sojson.common.dao.GorgeousturnMapper" >
+  <resultMap id="BaseResultMap" type="com.sojson.common.model.GorgeousturnM" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="createtime" property="createtime" jdbcType="VARCHAR" />
+    <result column="createtor" property="createtor" jdbcType="BIGINT" />
+    <result column="meetingtime" property="meetingtime" jdbcType="VARCHAR" />
+    <result column="meetingnum" property="meetingnum" jdbcType="BIGINT" />
+    <result column="meetingtitle" property="meetingtitle" jdbcType="VARCHAR" />
+    <result column="meetingremark" property="meetingremark" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List">
+   id ,createtime,createtor,meetingtime,meetingnum,meetingtitle,meetingremark
+  </sql>
+  
+   <sql id="limit_sql">
+  	   <if test="page_sql != null and page_sql != ''">
+      	${page_sql}
+      </if>
+  </sql>
+  
+  <sql id="where_all">
+  	<where>
+  	<if test="findContent != null and findContent !='' " >
+        and (
+        LOWER(meetingtitle) like  LOWER(CONCAT("%",#{findContent,jdbcType=VARCHAR},"%")) or
+        LOWER(meetingremark) like  LOWER(CONCAT("%",#{findContent,jdbcType=VARCHAR},"%"))
+        )
+      </if>
+      </where>
+  </sql>
+  <select id="findAll" resultMap="BaseResultMap" >
+  	 select 
+    <include refid="Base_Column_List" />
+    from gorgeousturnmeeting 
+    <include refid="where_all"/>
+    <include refid="limit_sql" />
+  </select>
+  <select id="findCount" resultMap="BaseResultMap" >
+ 	 select count(id) from  gorgeousturnmeeting
+  	<include refid="where_all" />
+  </select>
+  
+  
+  
+ <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from gorgeousturnmeeting
+   <!--  where id = #{id,jdbcType=BIGINT} -->
+  </select>
+  <select id="selectByPKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from gorgeousturnmeeting
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <select id="getAllmeeting_back" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from gorgeousturnmeeting 
+  </select>
+  
+  <select id="getAllmeeting" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+      m.id,per.id as perid 
+    from gorgeousturnmeeting m join gorgeousturnpeoinfo per on per.meetingid=m.id
+  </select>
+ 
+  <insert id="insertmeeting" useGeneratedKeys="true" keyProperty="id" parameterType="com.sojson.common.model.GorgeousturnM" >
+    insert into gorgeousturnmeeting
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="meetingtitle != null" >
+        meetingtitle,
+      </if>
+      <if test="meetingtime != null" >
+        meetingtime,
+      </if>
+       <if test="meetingremark != null" >
+        meetingremark,
+      </if>
+      <if test="createtime != null" >
+        createtime,
+      </if>
+      <if test="createtor != null" >
+        createtor,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="meetingtitle != null" >
+        #{meetingtitle,jdbcType=VARCHAR},
+      </if>
+       <if test="meetingtime != null" >
+        #{meetingtime,jdbcType=VARCHAR},
+      </if>
+        <if test="meetingremark != null" >
+        #{meetingremark,jdbcType=VARCHAR},
+      </if>
+      <if test="createtime != null" >
+        #{createtime,jdbcType=VARCHAR},
+      </if>
+        <if test="createtor != null" >
+        #{createtor,jdbcType=BIGINT},
+      </if>
+    </trim>
+  </insert>
+ 
+</mapper>
