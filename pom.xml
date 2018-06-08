@@ -10,7 +10,7 @@
 	<name>www.sojson.com</name>
 	<url>http://maven.apache.org</url>
 
-	<properties>
+	<properties>123
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
 
